@@ -1,0 +1,120 @@
+{
+   "author" : "Maroš Kollár",
+   "category" : "environment",
+   "defaults" : {
+      "apiKey" : "",
+      "description" : "__description__",
+      "interval" : 60,
+      "title" : "__title__",
+      "unitSystem" : "metric",
+      "unitTemperature" : "celsius"
+   },
+   "dependencies" : [],
+   "homepage" : "http://k-1.com",
+   "icon" : "icon.png",
+   "maturity" : "stable",
+   "moduleName" : "ForecastIO",
+   "options" : {
+      "fields" : {
+         "apiKey" : {
+            "label" : "__api_key__",
+            "order" : 2
+         },
+         "barometerDevice" : {
+            "label" : "__barometer_device_label__",
+            "order" : 9
+         },
+         "humidityDevice" : {
+            "label" : "__humidity_device_label__",
+            "order" : 6
+         },
+         "interval" : {
+            "helper" : "__interval_helper__",
+            "label" : "__interval_label__",
+            "order" : 5
+         },
+         "latitude" : {
+            "label" : "__latitude__"
+         },
+         "longitude" : {
+            "label" : "__longitude__"
+         },
+         "unitSystem" : {
+            "label" : "__unit_system__",
+            "optionLabels" : [
+               "__unit_system_metric__",
+               "__unit_system_imperial__"
+            ],
+            "order" : 3
+         },
+         "unitTemperature" : {
+            "label" : "__unit_temperature__",
+            "optionLabels" : [
+               "°C",
+               "°F"
+            ],
+            "order" : 4
+         },
+         "windDevice" : {
+            "label" : "__wind_device_label__",
+            "order" : 8
+         }
+      }
+   },
+   "repository" : {
+      "source" : "https://github.com/maros/Zway-ForecastIO",
+      "type" : "git"
+   },
+   "schema" : {
+      "properties" : {
+         "apiKey" : {
+            "required" : true,
+            "type" : "string"
+         },
+         "latitude" : {
+            "required" : true,
+            "type" : "number",
+            "order": 1
+         },
+         "longitude" : {
+            "required" : true,
+            "type" : "number",
+            "order": 2
+         },
+         "barometerDevice" : {
+            "default" : true,
+            "type" : "boolean"
+         },
+         "humidityDevice" : {
+            "default" : true,
+            "type" : "boolean"
+         },
+         "interval" : {
+            "required" : true,
+            "type" : "number"
+         },
+         "unitSystem" : {
+            "enum" : [
+               "metric",
+               "imperial"
+            ],
+            "required" : true
+         },
+         "unitTemperature" : {
+            "enum" : [
+               "celsius",
+               "fahrenheit"
+            ],
+            "required" : true
+         },
+         "windDevice" : {
+            "default" : true,
+            "type" : "boolean"
+         }
+      },
+      "required" : true,
+      "type" : "object"
+   },
+   "singleton" : true,
+   "version" : "1.00"
+}

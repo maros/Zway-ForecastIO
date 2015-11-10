@@ -1,0 +1,20 @@
+{
+   "api_key" : "API Key",
+   "current" : "Current condition",
+   "description" : "Fetches detailed weather data from www.forecast.io. Creates virtual devices for humidity, current conditions and forecasts.",
+   "forecast" : "Forecast",
+   "humidity" : "Humidity",
+   "humidity_device_label" : "Humidity device",
+   "barometer_device_label" : "Barometer device",
+   "interval_helper" : "Specifies weather data refresh interval in minutes",
+   "interval_label" : "Refresh interval",
+   "location" : "Location",
+   "title" : "Forecast.io widgets",
+   "unit_system" : "Unit System",
+   "unit_system_imperial" : "Imperial",
+   "unit_system_metric" : "Metric",
+   "unit_temperature" : "Temperature Unit",
+   "wind" : "Wind",
+   "wind_device_label" : "Wind device",
+   "barometer": "Barometer"
+}
