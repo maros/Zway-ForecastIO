@@ -17,6 +17,7 @@ function ForecastIO (id, controller) {
     this.unitTemperature    = undefined;
     this.unitSystem         = undefined;
     this.timer              = undefined;
+    this.url                = undefined;
     this.devices            = {};
 }
 
@@ -35,15 +36,16 @@ ForecastIO.prototype.init = function (config) {
 
     var self = this;
     
-    this.path               = 'forecast/'
+    this.unitTemperature    = config.unitTemperature.toString();
+    this.unitSystem         = config.unitSystem.toString();
+    this.langFile           = self.controller.loadModuleLang("ForecastIO");
+    this.url                = 'http://api.forecast.io/'
+        + 'forecast/'
         + config.apiKey.toString()
         + '/'
         + config.latitude.toString()
         + ','
         + config.longitude.toString();
-    this.unitTemperature    = config.unitTemperature.toString();
-    this.unitSystem         = config.unitSystem.toString();
-    this.langFile           = self.controller.loadModuleLang("ForecastIO");
     
     _.each(self.deviceTypes,function(deviceType) {
         var key = deviceType+'_device';
@@ -146,10 +148,8 @@ ForecastIO.prototype.addDevice = function(prefix,defaults) {
 ForecastIO.prototype.fetchWeather = function () {
     var self = this;
     
-    var url = "http://api.forecast.io/"+self.path;
-    
     http.request({
-        url: url,
+        url: self.url,
         async: true,
         success: function(response) { self.processResponse(response) },
         error: function(response) {
@@ -165,64 +165,44 @@ ForecastIO.prototype.fetchWeather = function () {
     });
 };
 
+// convertFC
+
 ForecastIO.prototype.processResponse = function(response) {
     console.log("[ForecastIO] Update");
     
     var self        = this;
     
-    var current     = response.data.current_observation;
     var currentDate = new Date();
-    var sunrise     = response.data.sun_phase.sunrise;
-    var sunset      = response.data.sun_phase.sunset;
-    var forecast    = response.data.forecast.simpleforecast.forecastday;
-    sunset.hour     = parseInt(sunset.hour);
-    sunset.minute   = parseInt(sunset.minute);
-    sunrise.hour    = parseInt(sunrise.hour);
-    sunrise.minute  = parseInt(sunrise.minute);
-    //console.logJS(response.data);
-    
-    var daynight = (
-            currentDate.getHours() > sunrise.hour 
-            || 
-            (
-                currentDate.getHours() === sunrise.hour 
-                && currentDate.getMinutes() > sunrise.minute
-            )
-        ) 
-        &&
-        (
-            currentDate.getHours() < sunset.hour 
-            || 
-            (
-                currentDate.getHours() === sunset.hour 
-                && currentDate.getMinutes() < sunset.minute
-            )
-        ) ? 'day':'night';
+    var current     = response.data.currently;
     
     // Handle current state
-    var currentTemperature = parseFloat(self.config.unitTemperature === "celsius" ? current.temp_c : current.temp_f);
+    var currentTemperature = parseFloat(self.config.unitTemperature === "celsius" ? self.convertTemp(current.temperature) : current.temperature);
+    
+    self.devices.current.set("metrics:icon", "http://icons.wxug.com/i/c/k/"+current.icon+".gif");
+    self.devices.current.set("metrics:level",currentTemperature);
+    self.devices.current.set("metrics:pop",current.percipProbability * 100);
+    self.devices.current.set("metrics:temperature",currentTemperature);
+    self.devices.current.set("metrics:weather",current.summary);
+    self.devices.current.set("metrics:raw",current);
+    self.devices.current.set("metrics:timestamp",currentDate.getTime());
+    self.devices.current.set("metrics:feelslike", parseFloat(self.config.apparentTemperature === "celsius" ? self.convertTemp(current.apparentTemperature) : current.apparentTemperature));
+    self.devices.current.set("metrics:ozone",current.ozone);
+    self.devices.current.set("metrics:dewpoint",current.dewPoint);
+    self.devices.current.set("metrics:percipintensity",current.percipIntensity);
+    
+    /*
     var currentHigh        = parseFloat(self.config.unitTemperature === "celsius" ? forecast[0].high.celsius : forecast[0].high.fahrenheit);
     var currentLow         = parseFloat(self.config.unitTemperature === "celsius" ? forecast[0].low.celsius : forecast[0].low.fahrenheit);
     self.devices.current.set("metrics:conditiongroup",self.transformCondition(current.icon));
     self.devices.current.set("metrics:condition",current.icon);
-    //self.devices.current.set("metrics:title",current.weather);
-    self.devices.current.set("metrics:level",currentTemperature);
-    self.devices.current.set("metrics:temperature",currentTemperature);
-    self.devices.current.set("metrics:icon", "http://icons.wxug.com/i/c/k/"+(daynight === 'night' ? 'nt_':'')+current.icon+".gif");
-    self.devices.current.set("metrics:feelslike", parseFloat(self.config.unitTemperature === "celsius" ? current.feelslike_c : current.feelslike_f));
-    self.devices.current.set("metrics:weather",current.weather);
-    self.devices.current.set("metrics:pop",forecast[0].pop);
     self.devices.current.set("metrics:high",currentHigh);
     self.devices.current.set("metrics:low",currentLow);
-    self.devices.current.set("metrics:raw",current);
-    self.devices.current.set("metrics:timestamp",currentDate.getTime());
     
     // Handle forecast
     var forecastHigh = parseFloat(self.config.unitTemperature === "celsius" ? forecast[1].high.celsius : forecast[1].high.fahrenheit);
     var forecastLow = parseFloat(self.config.unitTemperature === "celsius" ? forecast[1].low.celsius : forecast[1].low.fahrenheit);
     self.devices.forecast.set("metrics:conditiongroup",self.transformCondition(forecast[1].icon));
     self.devices.forecast.set("metrics:condition",forecast[1].icon);
-    //self.devices.current.set("metrics:title",forecast[1].weather);
     self.devices.forecast.set("metrics:level", forecastLow + ' - ' + forecastHigh);
     self.devices.forecast.set("metrics:icon", "http://icons.wxug.com/i/c/k/"+forecast[1].icon+".gif");
     self.devices.forecast.set("metrics:pop",forecast[1].pop);
@@ -230,12 +210,14 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.forecast.set("metrics:high",forecastHigh);
     self.devices.forecast.set("metrics:low",forecastLow);
     self.devices.forecast.set("metrics:raw",forecast);
+     */
     
     // Handle humidity
     if (self.humidityDevice) {
-        self.devices.humidity.set("metrics:level", parseInt(current.relative_humidity));
+        self.devices.humidity.set("metrics:level", parseInt(current.humidity) * 100);
     }
     
+    /*
     // Handle wind
     if (self.windDevice) {
         var wind = (parseInt(current.wind_kph) + parseInt(current.wind_gust_kph)) / 2;
@@ -256,13 +238,13 @@ ForecastIO.prototype.processResponse = function(response) {
         self.devices.wind.set("metrics:windlevel",windLevel);
         self.averageSet(self.devices.wind,'wind',wind);
     }
+    */
     
     // Handle barometer
     if (self.barometerDevice) {
-        var pressure = parseFloat(self.config.unitSystem === "metric" ? current.pressure_mb : current.pressure_in);
-        self.devices.barometer.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/barometer"+current.pressure_trend+".png");
+        var pressure = parseFloat(self.config.unitSystem === "metric" ? current.pressure : self.convertPH(current.pressure));
+        self.devices.barometer.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/barometer.png");
         self.devices.barometer.set('metrics:level',pressure);
-        self.devices.barometer.set('metrics:trend',current.pressure_trend);
     }
 };
 
