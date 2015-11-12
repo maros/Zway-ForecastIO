@@ -60,7 +60,7 @@ ForecastIO.prototype.init = function (config) {
     this.unitTemperature    = config.unitTemperature.toString();
     this.unitSystem         = config.unitSystem.toString();
     this.langFile           = self.controller.loadModuleLang("ForecastIO");
-    this.url                = 'http://api.forecast.io/'
+    this.url                = 'https://api.forecast.io/'
         + 'forecast/'
         + config.apiKey.toString()
         + '/'
@@ -74,14 +74,14 @@ ForecastIO.prototype.init = function (config) {
     });
 
     self.addDevice('current',{
-        probeTitle: 'weather_current',
+        probeTitle: 'ForecastIOCurrent',
         scaleTitle: config.unitTemperature === "celsius" ? '°C' : '°F',
         title: self.langFile.current,
         timestamp: 0
     });
     
     self.addDevice('forecast',{
-        probeTitle: 'weather_forecast',
+        probeTitle: 'ForecastIOForecast',
         scaleTitle: config.unitTemperature === "celsius" ? '°C' : '°F',
         title: self.langFile.forecast
     });
@@ -111,7 +111,6 @@ ForecastIO.prototype.init = function (config) {
             title: self.langFile.barometer
         });
     }
-     
     
     var currentTime     = (new Date()).getTime();
     var currentLevel    = self.devices['current'].get('metrics:level');
