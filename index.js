@@ -230,7 +230,7 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.current.set("metrics:raw",current);
     self.devices.current.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+current.icon+".png");
     self.devices.current.set("metrics:level",currentTemperature);
-    self.devices.current.set("metrics:pop",current.percipProbability * 100);
+    self.devices.current.set("metrics:pop",(current.precipProbability * 100));
     self.devices.current.set("metrics:temperature",currentTemperature);
     self.devices.current.set("metrics:weather",current.summary);
     self.devices.current.set("metrics:timestamp",currentDate.getTime());
@@ -245,14 +245,14 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.current.set("metrics:high",self.convertTemp(forecast0.temperatureMax));
     
     // Handle forecast
-    var forecastLow = self.convertTemp(forecast1.temperatureMin);
-    var forecastHigh = self.convertTemp(forecast1.temperatureMax);
+    var forecastLow = Math.round(self.convertTemp(forecast1.temperatureMin));
+    var forecastHigh = Math.round(self.convertTemp(forecast1.temperatureMax));
     
     self.devices.forecast.set("metrics:conditiongroup",self.transformCondition(forecast1.icon));
     self.devices.forecast.set("metrics:condition",forecast1.icon);
     self.devices.forecast.set("metrics:level", forecastLow + ' - ' + forecastHigh);
     self.devices.forecast.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+forecast1.icon+".png");
-    self.devices.forecast.set("metrics:pop",forecast1.precipProbability  * 100);
+    self.devices.forecast.set("metrics:pop",(forecast1.precipProbability  * 100));
     self.devices.forecast.set("metrics:percipintensity",forecast1.precipIntensity * 100);
     self.devices.forecast.set("metrics:weather",forecast1.summary);
     self.devices.forecast.set("metrics:high",forecastHigh);
@@ -269,14 +269,13 @@ ForecastIO.prototype.processResponse = function(response) {
     // Handle wind
     if (self.windDevice) {
         var wind            = parseInt(current.windSpeed);
-        var windConverted   = self.convertSpeed(wind);
         var beaufort = _.findIndex(self.windBeaufort,function(check) {
             return wind < check;
         });
         var icon = _.findIndex(self.windIcons,function(check) {
             return beaufort < check;
         });
-        
+        var windConverted   = self.convertSpeed(wind);
         self.devices.wind.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/wind"+icon+".png");
         self.devices.wind.set("metrics:level", windConverted);
         self.devices.wind.set("metrics:wind", windConverted);
