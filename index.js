@@ -187,8 +187,9 @@ ForecastIO.prototype.fetchWeather = function () {
 };
 
 ForecastIO.prototype.convertPressure = function(pressureHpa) {
-    pressureHpa = parseFloat(pressureHpa);
-    if (self.config.unitSystem === "imperial") {
+    var self = this;
+    pressureHpa = parseInt(pressureHpa);
+    if (self.config.unitSystem === "metric") {
         return pressureHpa;
     } else {
         return  Math.round(pressureHpa / 33.8638866667);
@@ -196,6 +197,7 @@ ForecastIO.prototype.convertPressure = function(pressureHpa) {
 };
 
 ForecastIO.prototype.convertTemp = function(tempF) {
+    var self = this;
     tempF = parseFloat(tempF);
     if (self.config.unitTemperature === "celsius") {
         return Math.round((tempF -32) * 5 / 9 * 10) / 10;
@@ -205,6 +207,7 @@ ForecastIO.prototype.convertTemp = function(tempF) {
 };
 
 ForecastIO.prototype.convertSpeed = function(speedMs) {
+    var self = this;
     speedMs = parseFloat(speedMs);
     if (self.config.unitSystem === "metric") {
         return Math.round(speedMs * 60 * 60 / 1000);
