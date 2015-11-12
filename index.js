@@ -214,49 +214,54 @@ ForecastIO.prototype.convertSpeed = function(speedMs) {
 };
 
 ForecastIO.prototype.processResponse = function(response) {
-    console.log("[ForecastIO] Update");
-    
     var self        = this;
     
+    console.log("[ForecastIO] Update");
     var currentDate = new Date();
     var current     = response.data.currently;
+    var forecast0   = response.data.daily.data[0];
+    var forecast1   = response.data.daily.data[1];
     
     // Handle current state
     var currentTemperature = self.convertTemp(current.temperature);
     
     self.devices.current.set("metrics:raw",current);
-    self.devices.current.set("metrics:icon", "http://icons.wxug.com/i/c/k/"+current.icon+".gif");
+    self.devices.current.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+current.icon+".png");
     self.devices.current.set("metrics:level",currentTemperature);
     self.devices.current.set("metrics:pop",current.percipProbability * 100);
     self.devices.current.set("metrics:temperature",currentTemperature);
     self.devices.current.set("metrics:weather",current.summary);
     self.devices.current.set("metrics:timestamp",currentDate.getTime());
-    self.devices.current.set("metrics:feelslike", self.convertTemp(current.apparentTemperature);
+    self.devices.current.set("metrics:feelslike", self.convertTemp(current.apparentTemperature));
     self.devices.current.set("metrics:ozone",current.ozone);
     self.devices.current.set("metrics:dewpoint",current.dewPoint);
-    self.devices.current.set("metrics:percipintensity",current.percipIntensity);
+    self.devices.current.set("metrics:percipintensity",current.precipIntensity * 100);
     self.devices.current.set("metrics:cloudcover",current.cloudCover * 100);
     self.devices.current.set("metrics:condition",current.icon); // TODO remove -night
     //self.devices.current.set("metrics:conditiongroup",self.transformCondition(current.icon));
-    self.devices.current.set("metrics:high",self.convertTemp(response.data[0].temperatureMax));
-    self.devices.current.set("metrics:low",self.convertTemp(response.data[0].temperatureMin);
+    self.devices.current.set("metrics:low",self.convertTemp(forecast0.temperatureMin));
+    self.devices.current.set("metrics:high",self.convertTemp(forecast0.temperatureMax));
     
     // Handle forecast
-    /*
-    self.devices.forecast.set("metrics:conditiongroup",self.transformCondition(forecast[1].icon));
-    self.devices.forecast.set("metrics:condition",forecast[1].icon);
+    var forecastLow = self.convertTemp(forecast1.temperatureMin);
+    var forecastHigh = self.convertTemp(forecast1.temperatureMax);
+    
+    self.devices.forecast.set("metrics:conditiongroup",self.transformCondition(forecast1.icon));
+    self.devices.forecast.set("metrics:condition",forecast1.icon);
     self.devices.forecast.set("metrics:level", forecastLow + ' - ' + forecastHigh);
-    self.devices.forecast.set("metrics:icon", "http://icons.wxug.com/i/c/k/"+forecast[1].icon+".gif");
-    self.devices.forecast.set("metrics:pop",forecast[1].pop);
-    self.devices.forecast.set("metrics:weather",forecast[1].conditions);
+    self.devices.forecast.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+forecast1.icon+".png");
+    self.devices.forecast.set("metrics:pop",forecast1.precipProbability  * 100);
+    self.devices.forecast.set("metrics:percipintensity",forecast1.precipIntensity * 100);
+    self.devices.forecast.set("metrics:weather",forecast1.summary);
     self.devices.forecast.set("metrics:high",forecastHigh);
     self.devices.forecast.set("metrics:low",forecastLow);
-    self.devices.forecast.set("metrics:raw",forecast);
-     */
+    
+    self.devices.forecast.set("metrics:raw_daily",response.data.daily);
+    self.devices.forecast.set("metrics:raw_hourly",response.data.hourly);
     
     // Handle humidity
     if (self.humidityDevice) {
-        self.devices.humidity.set("metrics:level", parseInt(current.humidity) * 100);
+        self.devices.humidity.set("metrics:level", parseFloat(current.humidity) * 100);
     }
     
     // Handle wind
@@ -280,22 +285,21 @@ ForecastIO.prototype.processResponse = function(response) {
     
     // Handle barometer
     if (self.barometerDevice) {
-        self.devices.barometer.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/barometer.png");
         self.devices.barometer.set('metrics:level',self.convertPressure(current.pressure));
     }
 };
 
 ForecastIO.prototype.transformCondition = function(condition) {
-    if (_.contains(["chanceflurries", "chancesleet", "chancesnow", "flurries","sleet","snow"], condition)) {
+    condition = condition.replace('-night','');
+    if (_.contains(["snow","sleet"], condition)) {
         return 'snow';
-    } else if (_.contains(["chancetstorms", "chancerain", "rain" ,"tstorms"], condition)) {
+    } else if (_.contains(["rain",""], condition)) {
         return 'poor';
-    } else if (_.contains(["cloudy", "mostlycloudy","fog"], condition)) {
+    } else if (_.contains(["wind","fog","cloudy"], condition)) {
         return 'neutral'
-    } else if (_.contains(["clear", "hazy", "mostlysunny", "partlysunny", "partlycloudy"], condition)) {
+    } else if (_.contains(["clear","partly-cloudy"], condition)) {
         return 'fair';
     }
-    
     return 'unknown';
 };
 
