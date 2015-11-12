@@ -30,6 +30,27 @@ _module = ForecastIO;
 // ----------------------------------------------------------------------------
 
 ForecastIO.prototype.deviceTypes = ['wind','humidity','barometer'];
+ForecastIO.prototype.windBeaufort = [
+    0.3,    // 0
+    1.5,
+    3.3,
+    5.5,
+    8,
+    10.8,
+    13.9,   // 6
+    17.2,
+    20.7,
+    24.5,
+    28.4,
+    32.6,
+    Number.POSITIVE_INFINITY
+];
+ForecastIO.prototype.windIcons = [
+    1,
+    4,
+    7,
+    Number.POSITIVE_INFINITY
+];
 
 ForecastIO.prototype.init = function (config) {
     ForecastIO.super_.prototype.init.call(this, config);
@@ -240,24 +261,22 @@ ForecastIO.prototype.processResponse = function(response) {
     
     // Handle wind
     if (self.windDevice) {
-        var wind            = parseInt(current.wind);
+        var wind            = parseInt(current.windSpeed);
         var windConverted   = self.convertSpeed(wind);
-        var windLevel       = 0;
-        if (wind >= 62) { // Beaufort 8
-            windLevel = 3;
-        } else if (wind >= 39) { // Beaufort 6
-            windLevel = 2;
-        } else if (wind >= 12) { // Beaufort 3
-            windLevel = 1;
-        }
-        self.devices.wind.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/wind"+windLevel+".png");
+        var beaufort = _.findIndex(self.windBeaufort,function(check) {
+            return wind < check;
+        });
+        var icon = _.findIndex(self.windIcons,function(check) {
+            return beaufort < check;
+        });
+        
+        self.devices.wind.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/wind"+icon+".png");
         self.devices.wind.set("metrics:level", windConverted);
         self.devices.wind.set("metrics:wind", windConverted);
         self.devices.wind.set("metrics:winddregrees", parseFloat(current.windBearing));
-        self.devices.wind.set("metrics:windlevel",windLevel);
+        self.devices.wind.set("metrics:beaufort",beaufort);
         self.averageSet(self.devices.wind,'wind',windConverted);
     }
-    */
     
     // Handle barometer
     if (self.barometerDevice) {
