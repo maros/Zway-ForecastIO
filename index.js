@@ -165,10 +165,19 @@ ForecastIO.prototype.fetchWeather = function () {
     });
 };
 
+ForecastIO.prototype.convertPressure = function(pressureHpa) {
+    pressureHpa = parseFloat(pressureHpa);
+    if (self.config.unitSystem === "imperial") {
+        return pressureHpa;
+    } else {
+        return  Math.round(pressureHpa / 33.8638866667);
+    }
+};
+
 ForecastIO.prototype.convertTemp = function(tempF) {
     tempF = parseFloat(tempF);
     if (self.config.unitTemperature === "celsius") {
-        return (tempF -32) * 5 / 9;
+        return Math.round((tempF -32) * 5 / 9 * 10) / 10;
     } else {
         return tempF;
     }
@@ -177,9 +186,9 @@ ForecastIO.prototype.convertTemp = function(tempF) {
 ForecastIO.prototype.convertSpeed = function(speedMs) {
     speedMs = parseFloat(speedMs);
     if (self.config.unitSystem === "metric") {
-        return speedMs * 60 * 60 / 1000;
+        return Math.round(speedMs * 60 * 60 / 1000);
     } else {
-        return  speedMs * 60 * 60 / 1609.34;
+        return Math.round(speedMs * 60 * 60 / 1609.34);
     }
 };
 
@@ -252,9 +261,8 @@ ForecastIO.prototype.processResponse = function(response) {
     
     // Handle barometer
     if (self.barometerDevice) {
-        var pressure = parseFloat(self.config.unitSystem === "metric" ? current.pressure : self.convertPH(current.pressure));
         self.devices.barometer.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/barometer.png");
-        self.devices.barometer.set('metrics:level',pressure);
+        self.devices.barometer.set('metrics:level',self.convertPressure(current.pressure));
     }
 };
 
