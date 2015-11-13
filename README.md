@@ -4,7 +4,7 @@ Zway Automation module for fetching current condition and forecasts from the
 ForecastIO API. Creates virtual devices for humidity, wind, current 
 conditions and forecasts.
 
-See http://www.wunderground.com/weather/api/d/docs for details.
+See https://developer.forecast.io/ for details.
 
 # Configuration
 
@@ -23,7 +23,7 @@ Display metric or imperial units for air pressure and wind speed
 ## apiKey
 
 Required API key for accessing the service. See 
-http://www.wunderground.com/weather/api/ for obtaining an API key.
+https://developer.forecast.io/register for obtaining an API key.
 
 ## windDevice, humidityDevice, barometerDevice
 
@@ -31,7 +31,7 @@ Flag that sets if devices should be created
 
 # Virtual Devices
 
-This module creates up to four virtual devices
+This module creates up to five virtual devices
 
 ## Current conditions
 
@@ -42,9 +42,12 @@ Additionally the following metrics are set
 *    metrics:temperature
 *    metrics:condition
 *    metrics:conditiongroup: fair,neutral,rain or snow
-*    metrics:feelslike
-*    metrics:weather: Current weather
-*    metrics:pop: probability of precipitation
+*    metrics:feelslike: Felt temperature
+*    metrics:ozone: Ozone level
+*    metrics:dewpoint: Dewpoint temperature
+*    metrics:cloudcover: Cloud cover [0-100]
+*    metrics:weather: Current weather summary (only in English) 
+*    metrics:pop: probability of precipitation [0-100]
 *    metrics:high: expected high temperature today
 *    metrics:low: expected low temperature today
 *    metrics:raw: raw current conditions data returned by the API
@@ -57,11 +60,13 @@ range.
 *    metrics:level Forecast temperature range
 *    metrics:condition
 *    metrics:conditiongroup: fair,neutral,rain or snow
-*    metrics:weather: Current weather
+*    metrics:weather: Forecast summary (only in English)
 *    metrics:pop: probability of precipitation
+*    metrics:percipintensity: intensity of percipitation
 *    metrics:high: expected high temperature today
 *    metrics:low: expected low temperature today
-*    metrics:raw: raw forecast data returned by the API
+*    metrics:raw_daily: raw daily forecast data returned by the API
+*    metrics:raw_hourly: raw hourly forecast data
 
 ## Wind
 
@@ -70,9 +75,8 @@ Displays the current wind speed. Wind strength is indicated by the icon.
 *    metrics:level: Wind speed
 *    metrics:dir: Wind direction
 *    metrics:wind_avg: Wind average of last three updates
-*    metrics:windgust: Wind gust speeds
 *    metrics:winddregrees: Wind degrees
-*    metrics:windlevel: Wind strength [0-3]
+*    metrics:beaufort: Wind strength in beaufort [0-12]
 
 ## Humidity
 
@@ -80,10 +84,7 @@ Displays the current humidity.
 
 ## Barometer
 
-Displays the current air pressure. Rising and falling pressure is also 
-indicated by the icon.
-
-*    metrics:trend: Pressure trend
+Displays the current air pressure.
 
 # Events
 
@@ -115,8 +116,7 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or any 
 later version.
 
-Parts of the barometer icon are from (http://www.flaticon.com/authors/yannick) 
-, licensed under the Creative Commons 3.0 license.
+Climate icons from http://adamwhitcroft.com/climacons/
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
