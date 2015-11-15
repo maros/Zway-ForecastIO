@@ -41,7 +41,7 @@ Additionally the following metrics are set
 *    metrics:level Current temperature
 *    metrics:temperature
 *    metrics:condition
-*    metrics:conditiongroup: fair,neutral,rain or snow
+*    metrics:conditiongroup: fair,neutral,poor or snow
 *    metrics:feelslike: Felt temperature
 *    metrics:ozone: Ozone level
 *    metrics:dewpoint: Dewpoint temperature
@@ -59,7 +59,7 @@ range.
 
 *    metrics:level Forecast temperature range
 *    metrics:condition
-*    metrics:conditiongroup: fair,neutral,rain or snow
+*    metrics:conditiongroup: fair,neutral,poor or snow
 *    metrics:weather: Forecast summary (only in English)
 *    metrics:pop: probability of precipitation
 *    metrics:percipintensity: intensity of percipitation
