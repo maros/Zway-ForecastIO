@@ -66,7 +66,9 @@ ForecastIO.prototype.init = function (config) {
         + '/'
         + config.latitude.toString()
         + ','
-        + config.longitude.toString();
+        + config.longitude.toString()
+        + '?exclude=flags,alerts&lang='
+        + self.controller.defaultLang;
     
     _.each(self.deviceTypes,function(deviceType) {
         var key = deviceType+'_device';
