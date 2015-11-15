@@ -148,8 +148,12 @@ ForecastIO.prototype.stop = function() {
 ForecastIO.prototype.addDevice = function(prefix,defaults) {
     var self = this;
     
+    probeTitle = defaults.probeTitle;
     var deviceParams = {
-        overlay: { deviceType: "sensorMultilevel" },
+        overlay: { 
+            deviceType: "sensorMultilevel",
+            metrics: { probeTitle: probeTitle }
+        },
         defaults: {
             metrics: defaults
         },
