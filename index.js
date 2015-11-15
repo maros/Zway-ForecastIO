@@ -239,8 +239,8 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.current.set("metrics:dewpoint",current.dewPoint);
     self.devices.current.set("metrics:percipintensity",current.precipIntensity * 100);
     self.devices.current.set("metrics:cloudcover",current.cloudCover * 100);
-    self.devices.current.set("metrics:condition",current.icon); // TODO remove -night
-    //self.devices.current.set("metrics:conditiongroup",self.transformCondition(current.icon));
+    self.devices.current.set("metrics:condition",current.icon);
+    self.devices.current.set("metrics:conditiongroup",self.convertCondition(current.icon));
     self.devices.current.set("metrics:low",self.convertTemp(forecast0.temperatureMin));
     self.devices.current.set("metrics:high",self.convertTemp(forecast0.temperatureMax));
     
@@ -248,7 +248,7 @@ ForecastIO.prototype.processResponse = function(response) {
     var forecastLow = Math.round(self.convertTemp(forecast1.temperatureMin));
     var forecastHigh = Math.round(self.convertTemp(forecast1.temperatureMax));
     
-    self.devices.forecast.set("metrics:conditiongroup",self.transformCondition(forecast1.icon));
+    self.devices.forecast.set("metrics:conditiongroup",self.convertCondition(forecast1.icon));
     self.devices.forecast.set("metrics:condition",forecast1.icon);
     self.devices.forecast.set("metrics:level", forecastLow + ' - ' + forecastHigh);
     self.devices.forecast.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+forecast1.icon+".png");
@@ -290,7 +290,7 @@ ForecastIO.prototype.processResponse = function(response) {
     }
 };
 
-ForecastIO.prototype.transformCondition = function(condition) {
+ForecastIO.prototype.convertCondition = function(condition) {
     condition = condition.replace('-night','');
     if (_.contains(["snow","sleet"], condition)) {
         return 'snow';
