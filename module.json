@@ -19,7 +19,7 @@
          "apiKey" : {
             "label" : "__api_key__",
             "order" : 3
-         }
+         },
          "barometerDevice" : {
             "label" : "__barometer_device_label__",
             "order" : 9
