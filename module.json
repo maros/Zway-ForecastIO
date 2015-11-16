@@ -18,26 +18,28 @@
       "fields" : {
          "apiKey" : {
             "label" : "__api_key__",
-            "order" : 2
-         },
+            "order" : 3
+         }
          "barometerDevice" : {
             "label" : "__barometer_device_label__",
             "order" : 9
          },
          "humidityDevice" : {
             "label" : "__humidity_device_label__",
-            "order" : 6
+            "order" : 7
          },
          "interval" : {
             "helper" : "__interval_helper__",
             "label" : "__interval_label__",
-            "order" : 5
+            "order" : 6
          },
          "latitude" : {
-            "label" : "__latitude__"
+            "label" : "__latitude__",
+            "order" : 1
          },
          "longitude" : {
-            "label" : "__longitude__"
+            "label" : "__longitude__",
+            "order" : 2
          },
          "unitSystem" : {
             "label" : "__unit_system__",
@@ -45,7 +47,7 @@
                "__unit_system_metric__",
                "__unit_system_imperial__"
             ],
-            "order" : 3
+            "order" : 4
          },
          "unitTemperature" : {
             "label" : "__unit_temperature__",
@@ -53,7 +55,7 @@
                "°C",
                "°F"
             ],
-            "order" : 4
+            "order" : 5
          },
          "windDevice" : {
             "label" : "__wind_device_label__",
@@ -84,12 +86,10 @@
             "type" : "number"
          },
          "latitude" : {
-            "order" : 1,
             "required" : true,
             "type" : "number"
          },
          "longitude" : {
-            "order" : 2,
             "required" : true,
             "type" : "number"
          },
