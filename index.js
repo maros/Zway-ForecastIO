@@ -47,8 +47,8 @@ ForecastIO.prototype.windBeaufort = [
 ];
 ForecastIO.prototype.windIcons = [
     1,
-    4,
-    7,
+    3,
+    6,
     Number.POSITIVE_INFINITY
 ];
 
