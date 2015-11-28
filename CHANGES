@@ -1,2 +1,8 @@
+1.01 2015 Nov 28, Sat
+    * German translation
+    * Update beaufort -> icon
+    * Cleanup module.json
+    * Add language to api request
+
 1.00 2015 Nov 15, Sun
     * Initial release
