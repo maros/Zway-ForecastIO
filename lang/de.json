@@ -1,0 +1,21 @@
+{
+   "api_key" : "API Schlüssel",
+   "barometer" : "Barometer",
+   "barometer_device_label" : "Barometer Modul",
+   "current" : "Wetter",
+   "description" : "Dieses Modul holt aktuelle Wetterdaten und Vorhersagen von www.forecast.io. Es wird je ein Modul für die aktuellen Wetterbedingungen, die Vorhersage, Windbedingungen und den Luftdruck angelegt.",
+   "forecast" : "Vorhersage",
+   "humidity" : "Luftfeuchtigkeit",
+   "humidity_device_label" : "Hygrometer Modul",
+   "interval_helper" : "Daten Aktualisierungsintervall in Minuten",
+   "interval_label" : "Aktualisierungsintervall",
+   "Breite" : "Latitude",
+   "Längr" : "Longitude",
+   "title" : "Forecast.io Modul",
+   "unit_system" : "Maßeinheiten",
+   "unit_system_imperial" : "Angloamerikanisch",
+   "unit_system_metric" : "Metrisch",
+   "unit_temperature" : "Temperatureinheit",
+   "wind" : "Wind",
+   "wind_device_label" : "Wind Modul"
+}
