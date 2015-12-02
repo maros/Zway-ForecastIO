@@ -115,8 +115,8 @@ ForecastIO.prototype.init = function (config) {
     }
     
     var currentTime     = (new Date()).getTime();
-    var currentLevel    = self.devices['current'].get('metrics:level');
-    var updateTime      = self.devices['current'].get('metrics:timestamp');
+    var currentLevel    = self.devices.current.get('metrics:level');
+    var updateTime      = self.devices.current.get('metrics:timestamp');
     var intervalTime    = parseInt(self.config.interval) * 60 * 1000;
     
     self.timer = setInterval(function() {
@@ -177,7 +177,7 @@ ForecastIO.prototype.fetchWeather = function () {
     http.request({
         url: self.url,
         async: true,
-        success: function(response) { self.processResponse(response) },
+        success: function(response) { self.processResponse(response); },
         error: function(response) {
             console.error("[ForecastIO] Update error");
             console.logJS(response);
@@ -303,7 +303,7 @@ ForecastIO.prototype.convertCondition = function(condition) {
     } else if (_.contains(["rain",""], condition)) {
         return 'poor';
     } else if (_.contains(["wind","fog","cloudy"], condition)) {
-        return 'neutral'
+        return 'neutral';
     } else if (_.contains(["clear","partly-cloudy"], condition)) {
         return 'fair';
     }
