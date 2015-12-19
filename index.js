@@ -221,6 +221,16 @@ ForecastIO.prototype.convertSpeed = function(speedMs) {
     }
 };
 
+ForecastIO.prototype.convertInch = function(inch) {
+    var self = this;
+    inch = parseFloat(inch);
+    if (self.config.unitSystem === "metric") {
+        return inch * 2.54;
+    } else {
+        return inch;
+    }
+};
+
 ForecastIO.prototype.processResponse = function(response) {
     var self        = this;
     
@@ -243,7 +253,7 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.current.set("metrics:feelslike", self.convertTemp(current.apparentTemperature));
     self.devices.current.set("metrics:ozone",current.ozone);
     self.devices.current.set("metrics:dewpoint",current.dewPoint);
-    self.devices.current.set("metrics:percipintensity",current.precipIntensity * 100);
+    self.devices.current.set("metrics:percipintensity",self.convertInch(current.precipIntensity));
     self.devices.current.set("metrics:cloudcover",current.cloudCover * 100);
     self.devices.current.set("metrics:condition",current.icon);
     self.devices.current.set("metrics:conditiongroup",self.convertCondition(current.icon));
@@ -259,7 +269,7 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.forecast.set("metrics:level", forecastLow + ' - ' + forecastHigh);
     self.devices.forecast.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+forecast1.icon+".png");
     self.devices.forecast.set("metrics:pop",(forecast1.precipProbability  * 100));
-    self.devices.forecast.set("metrics:percipintensity",forecast1.precipIntensity * 100);
+    self.devices.forecast.set("metrics:percipintensity",self.convertInch(forecast1.precipIntensity));
     self.devices.forecast.set("metrics:weather",forecast1.summary);
     self.devices.forecast.set("metrics:high",forecastHigh);
     self.devices.forecast.set("metrics:low",forecastLow);
