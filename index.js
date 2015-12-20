@@ -225,7 +225,7 @@ ForecastIO.prototype.convertInch = function(inch) {
     var self = this;
     inch = parseFloat(inch);
     if (self.config.unitSystem === "metric") {
-        return inch * 2.54;
+        return inch * 2.54 * 10;
     } else {
         return inch;
     }
