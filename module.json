@@ -10,7 +10,7 @@
       "unitTemperature" : "celsius"
    },
    "dependencies" : [],
-   "homepage" : "http://k-1.com",
+   "homepage" : "https://github.com/maros/Zway-ForecastIO/",
    "icon" : "icon.png",
    "maturity" : "stable",
    "moduleName" : "ForecastIO",
