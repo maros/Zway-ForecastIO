@@ -90,7 +90,7 @@ ForecastIO.prototype.init = function (config) {
     
     if (self.humidityDevice) {
         self.addDevice('humidity',{
-            probeTitle: 'humidity',
+            probeTitle: 'Humidity',
             icon: '/ZAutomation/api/v1/load/modulemedia/ForecastIO/humidity.png',
             scaleTitle: '%',
             title: self.langFile.humidity
@@ -99,7 +99,7 @@ ForecastIO.prototype.init = function (config) {
     
     if (self.windDevice) {
         self.addDevice('wind',{
-            probeTitle: 'wind',
+            probeTitle: 'Wind',
             scaleTitle: config.unitSystem === "metric" ? 'km/h' : 'mph',
             title: self.langFile.wind
         });
