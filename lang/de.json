@@ -14,7 +14,7 @@
    "interval_label" : "Aktualisierungsintervall",
    "latitude" : "Breite",
    "longitude" : "Länge",
-   "m_descr" : "Dieses Modul holt aktuelle Wetterdaten und Vorhersagen von forecast.io. Es wird je ein Modul für die aktuellen Wetterbedingungen, die Vorhersage, Windbedingungen und den Luftdruck angelegt.<br>Siehe  <a href=\"https://github.com/maros/Zway-ForecastIO/blob/master/README.md\">github.com/maros/Zway-ForecastIO</a> für detailliertere Dokumentation.",
+   "m_descr" : "Dieses Modul holt aktuelle Wetterdaten und Vorhersagen von forecast.io. Es wird je ein Modul für die aktuellen Wetterbedingungen, die Vorhersage, Windbedingungen und den Luftdruck angelegt.<br>Siehe <a href=https://github.com/maros/Zway-ForecastIO/blob/master/README.md>github.com/maros/Zway-ForecastIO</a> für detailliertere Dokumentation.",
    "m_title" : "Forecast.io Modul",
    "unit_system" : "Maßeinheiten",
    "unit_system_imperial" : "Angloamerikanisch",

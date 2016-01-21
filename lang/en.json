@@ -14,7 +14,7 @@
    "interval_label" : "Refresh interval",
    "latitude" : "Latitude",
    "longitude" : "Longitude",
-   "m_descr" : "Fetches detailed weather data from www.forecast.io. Creates up to sic virtual devices for humidity, wind, current conditions and (high/low/condition) forecasts.<br>Check  <a href=\"https://github.com/maros/Zway-ForecastIO/blob/master/README.md\">github.com/maros/Zway-ForecastIO</a> for detailed documentation.",
+   "m_descr" : "Fetches detailed weather data from www.forecast.io. Creates up to sic virtual devices for humidity, wind, current conditions and (high/low/condition) forecasts.<br>Check <a href=https://github.com/maros/Zway-ForecastIO/blob/master/README.md>github.com/maros/Zway-ForecastIO</a> for detailed documentation.",
    "m_title" : "Forecast.io module",
    "unit_system" : "Unit System",
    "unit_system_imperial" : "Imperial",
