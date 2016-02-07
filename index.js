@@ -201,11 +201,11 @@ ForecastIO.prototype.fetchWeather = function () {
         async: true,
         success: function(response) { self.processResponse(response); },
         error: function(response) {
-            console.error("[ForecastIO] Update error");
+            console.error("[ForecastIO] Update error: "+response.statusText);
             console.logJS(response);
             self.controller.addNotification(
                 "error", 
-                self.langFile.err_fetch, 
+                self.langFile.error_fetch, 
                 "module", 
                 "ForecastIO"
             );

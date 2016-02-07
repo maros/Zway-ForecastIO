@@ -21,5 +21,6 @@
    "unit_system_metric" : "Metrisch",
    "unit_temperature" : "Temperatureinheit",
    "wind" : "Wind",
-   "wind_device_label" : "Wind Modul"
+   "wind_device_label" : "Wind Modul",
+   "error_fetch": "Konnte Wetterdaten nicht von forecast.io laden."
 }
