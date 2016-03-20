@@ -73,6 +73,7 @@ ForecastIO.prototype.init = function (config) {
         + self.controller.defaultLang;
     
     self.addDevice('current',{
+        probeType: 'temperature',
         probeTitle: 'ForecastIOCurrent',
         scaleTitle: scaleTemperature,
         title: self.langFile.current,
@@ -80,6 +81,7 @@ ForecastIO.prototype.init = function (config) {
     });
     
     self.addDevice('forecast',{
+        probeType: 'temperature_forecast',
         probeTitle: 'ForecastIOForecast',
         scaleTitle: scaleTemperature,
         title: self.langFile.forecast
@@ -87,7 +89,7 @@ ForecastIO.prototype.init = function (config) {
     
     if (self.config.humidityDevice) {
         self.addDevice('humidity',{
-            probeTitle: 'Humidity',
+            probeType: 'humidity',
             icon: '/ZAutomation/api/v1/load/modulemedia/ForecastIO/humidity.png',
             scaleTitle: '%',
             title: self.langFile.humidity
@@ -96,7 +98,7 @@ ForecastIO.prototype.init = function (config) {
     
     if (self.config.forecastLowDevice) {
         self.addDevice('forecastLow',{
-            probeTitle: 'Temperature',
+            probeType: 'temperature_forecast_low',
             icon: 'temperature',
             scaleTitle: scaleTemperature,
             title: self.langFile.forecastLow
@@ -105,7 +107,7 @@ ForecastIO.prototype.init = function (config) {
     
     if (self.config.forecastHighDevice) {
         self.addDevice('forecastHigh',{
-            probeTitle: 'Temperature',
+            probeType: 'temperature_forecast_high',
             icon: 'temperature',
             scaleTitle: scaleTemperature,
             title: self.langFile.forecastHigh
@@ -114,7 +116,7 @@ ForecastIO.prototype.init = function (config) {
     
     if (self.config.windDevice) {
         self.addDevice('wind',{
-            probeTitle: 'Wind',
+            probeType: 'wind',
             scaleTitle: config.unitSystem === "metric" ? 'km/h' : 'mph',
             title: self.langFile.wind
         });
@@ -122,7 +124,7 @@ ForecastIO.prototype.init = function (config) {
     
     if (self.config.barometerDevice) {
         self.addDevice('barometer',{
-            probeTitle: 'barometer',
+            probeType: 'barometer',
             scaleTitle: config.unitSystem === "metric" ? 'hPa' : 'inHg',
             icon: '/ZAutomation/api/v1/load/modulemedia/ForecastIO/barometer.png',
             title: self.langFile.barometer
@@ -169,14 +171,17 @@ ForecastIO.prototype.stop = function() {
 ForecastIO.prototype.addDevice = function(prefix,defaults) {
     var self = this;
     
-    var probeTitle = defaults.probeTitle;
-    var scaleTitle = defaults.scaleTitle || '';
+    var probeTitle  = defaults.probeTitle || '';
+    var scaleTitle  = defaults.scaleTitle || '';
+    var probeType   = defaults.probeType || prefix;
+    delete defaults.probeType;
     delete defaults.probeTitle;
     delete defaults.scaleTitle;
     
     var deviceParams = {
         overlay: { 
             deviceType: "sensorMultilevel",
+            proveType: probeType,
             metrics: { 
                 probeTitle: probeTitle,
                 scaleTitle: scaleTitle
