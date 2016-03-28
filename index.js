@@ -18,6 +18,7 @@ function ForecastIO (id, controller) {
     this.unitSystem         = undefined;
     this.timer              = undefined;
     this.url                = undefined;
+    this.update             = undefined;
     this.devices            = {};
 }
 
@@ -165,6 +166,10 @@ ForecastIO.prototype.stop = function() {
         self.devices = {};
     }
     
+    if (typeof(self.update) !== 'undefined') {
+        clearTimeout(self.update);
+    }
+    
     ForecastIO.super_.prototype.stop.call(this);
 };
 
@@ -191,7 +196,15 @@ ForecastIO.prototype.addDevice = function(prefix,defaults) {
             metrics: defaults
         },
         deviceId: "ForecastIO_"+prefix+"_" + this.id,
-        moduleId: prefix+"_"+this.id
+        moduleId: prefix+"_"+this.id,
+        handler: function(command) {
+            if (command === 'update') {
+                if (typeof(self.update) !== 'undefined') {
+                    clearTimeout(self.update);
+                }
+                self.update = setTimeout(_bind(self.fetchWeather,self),10*1000);
+            }
+        }
     };
     
     self.devices[prefix] = self.controller.devices.create(deviceParams);
@@ -204,6 +217,10 @@ ForecastIO.prototype.addDevice = function(prefix,defaults) {
 
 ForecastIO.prototype.fetchWeather = function () {
     var self = this;
+    
+    if (typeof(self.update) !== 'undefined') {
+        clearTimeout(self.update);
+    }
     
     http.request({
         url: self.url,
