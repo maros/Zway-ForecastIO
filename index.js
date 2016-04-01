@@ -141,14 +141,16 @@ ForecastIO.prototype.init = function (config) {
         self.fetchWeather(self);
     }, intervalTime);
     
-    if (typeof(updateTime) === 'undefined') {
-        self.fetchWeather(self);
-    } else {
-        console.log('[ForecastIO] Last update time '+updateTime);
-        if ((updateTime + intervalTime / 3) < currentTime) {
+    setTimeout(function() {
+        if (typeof(updateTime) === 'undefined') {
             self.fetchWeather(self);
+        } else {
+            console.log('[ForecastIO] Last update time '+updateTime);
+            if ((updateTime + intervalTime / 3) < currentTime) {
+                self.fetchWeather(self);
+            }
         }
-    }
+    });
 };
 
 ForecastIO.prototype.stop = function() {
