@@ -74,7 +74,7 @@ ForecastIO.prototype.init = function (config) {
         + self.controller.defaultLang;
     
     self.addDevice('current',{
-        probeType: 'temperature',
+        probeType: 'condition',
         probeTitle: 'ForecastIOCurrent',
         scaleTitle: scaleTemperature,
         title: self.langFile.current,
@@ -82,7 +82,7 @@ ForecastIO.prototype.init = function (config) {
     });
     
     self.addDevice('forecast',{
-        probeType: 'temperature_forecast',
+        probeType: 'forecast',
         probeTitle: 'ForecastIOForecast',
         scaleTitle: scaleTemperature,
         title: self.langFile.forecast
@@ -188,7 +188,7 @@ ForecastIO.prototype.addDevice = function(prefix,defaults) {
     var deviceParams = {
         overlay: { 
             deviceType: "sensorMultilevel",
-            proveType: probeType,
+            probeType: probeType,
             metrics: { 
                 probeTitle: probeTitle,
                 scaleTitle: scaleTitle
