@@ -291,7 +291,18 @@ ForecastIO.prototype.processResponse = function(response) {
     var forecast1   = response.data.daily.data[1];
     
     // Handle current state
-    var currentTemperature = self.convertTemp(current.temperature);
+    var currentTemperature  = self.convertTemp(current.temperature);
+    var temperatureList     = self.listSet(self.devices.current,"temperature",currentTemperature,3);
+    var temperatureDiff     = _.last(temperatureList) - _.first(temperatureList);
+    var changeTemperature   = 'unchanged';
+    if (Math.abs(temperatureDiff) > 0.1) {
+        if (previousTemperature > 1) {
+            changeTemperature = 'rise';
+        } else {
+            changeTemperature = 'fall';
+        }
+    }
+    self.devices.current.set("metrics:temperatureChange",changeTemperature);
     
     self.devices.current.set("metrics:raw",current);
     self.devices.current.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+current.icon+".png");
@@ -378,19 +389,23 @@ ForecastIO.prototype.convertCondition = function(condition) {
     return 'unknown';
 };
 
-ForecastIO.prototype.averageSet = function(device,key,value,count) {
+ForecastIO.prototype.listSet = function(deviceObject,key,value,count) {
     count = count || 3;
-    var list = device.get('metrics:'+key+'_list') || [];
+    var varKey = 'metrics:'+key+'_list';
+    var list = deviceObject.get(varKey) || [];
     list.unshift(value);
     while (list.length > count) {
         list.pop();
     }
+    deviceObject.set(varKey,list);
+    return list;
+};
+
+ForecastIO.prototype.averageSet = function(deviceObject,key,value,count) {
+    var list = this.listSet(deviceObject,key,value,count);
     var sum = _.reduce(list, function(i,j){ return i + j; }, 0);
     var avg = sum / list.length;
-
-    device.set('metrics:'+key+'_list',list);
-    device.set('metrics:'+key+'_avg',avg);
-    
+    deviceObject.set('metrics:'+key+'_avg',avg);
     return avg;
 };
 
