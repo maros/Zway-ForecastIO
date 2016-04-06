@@ -296,7 +296,7 @@ ForecastIO.prototype.processResponse = function(response) {
     var temperatureDiff     = _.last(temperatureList) - _.first(temperatureList);
     var changeTemperature   = 'unchanged';
     if (Math.abs(temperatureDiff) > 0.1) {
-        if (previousTemperature > 1) {
+        if (temperatureDiff > 0) {
             changeTemperature = 'rise';
         } else {
             changeTemperature = 'fall';
