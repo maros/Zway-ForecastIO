@@ -82,7 +82,7 @@ ForecastIO.prototype.init = function (config) {
     });
     
     self.addDevice('forecast',{
-        probeType: 'forecast',
+        probeType: 'forecast_range',
         probeTitle: 'ForecastIOForecast',
         scaleTitle: scaleTemperature,
         title: self.langFile.forecast
@@ -99,7 +99,7 @@ ForecastIO.prototype.init = function (config) {
     
     if (self.config.forecastLowDevice) {
         self.addDevice('forecastLow',{
-            probeType: 'temperature_forecast_low',
+            probeType: 'forecast_low',
             icon: 'temperature',
             scaleTitle: scaleTemperature,
             title: self.langFile.forecastLow
@@ -108,7 +108,7 @@ ForecastIO.prototype.init = function (config) {
     
     if (self.config.forecastHighDevice) {
         self.addDevice('forecastHigh',{
-            probeType: 'temperature_forecast_high',
+            probeType: 'forecast_high',
             icon: 'temperature',
             scaleTitle: scaleTemperature,
             title: self.langFile.forecastHigh
