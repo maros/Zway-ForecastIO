@@ -307,7 +307,7 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.current.set("metrics:raw",current);
     self.devices.current.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+current.icon+".png");
     self.devices.current.set("metrics:level",currentTemperature);
-    self.devices.current.set("metrics:pop",(current.precipProbability * 100));
+    self.devices.current.set("metrics:pop",Math.round(current.precipProbability * 100));
     self.devices.current.set("metrics:temperature",currentTemperature);
     self.devices.current.set("metrics:weather",current.summary);
     self.devices.current.set("metrics:timestamp",currentDate.getTime());
@@ -315,7 +315,7 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.current.set("metrics:ozone",current.ozone);
     self.devices.current.set("metrics:dewpoint",current.dewPoint);
     self.devices.current.set("metrics:percipintensity",self.convertInch(current.precipIntensity));
-    self.devices.current.set("metrics:cloudcover",current.cloudCover * 100);
+    self.devices.current.set("metrics:cloudcover",Math.round(current.cloudCover * 100));
     self.devices.current.set("metrics:condition",current.icon);
     self.devices.current.set("metrics:conditiongroup",self.convertCondition(current.icon));
     self.devices.current.set("metrics:low",self.convertTemp(forecast0.temperatureMin));
@@ -329,7 +329,7 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.forecast.set("metrics:condition",forecast1.icon);
     self.devices.forecast.set("metrics:level", forecastLow + ' - ' + forecastHigh);
     self.devices.forecast.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+forecast1.icon+".png");
-    self.devices.forecast.set("metrics:pop",(forecast1.precipProbability  * 100));
+    self.devices.forecast.set("metrics:pop",Math.round(forecast1.precipProbability  * 100));
     self.devices.forecast.set("metrics:percipintensity",self.convertInch(forecast1.precipIntensity));
     self.devices.forecast.set("metrics:weather",forecast1.summary);
     self.devices.forecast.set("metrics:high",forecastHigh);
@@ -348,7 +348,7 @@ ForecastIO.prototype.processResponse = function(response) {
     
     // Handle humidity
     if (self.config.humidityDevice) {
-        self.devices.humidity.set("metrics:level", parseFloat(current.humidity) * 100);
+        self.devices.humidity.set("metrics:level", Math.round(parseFloat(current.humidity) * 100));
     }
     
     // Handle wind
