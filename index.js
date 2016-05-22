@@ -292,7 +292,7 @@ ForecastIO.prototype.processResponse = function(response) {
     
     // Handle current state
     var currentTemperature  = self.convertTemp(current.temperature);
-    var temperatureList     = self.listSet(self.devices.current,"temperature",currentTemperature,3);
+    var temperatureList     = self.listSet(self.devices.current,"temperature_list",currentTemperature,3);
     var temperatureDiff     = _.last(temperatureList) - _.first(temperatureList);
     var changeTemperature   = 'unchanged';
     if (Math.abs(temperatureDiff) > 0.1) {
@@ -362,11 +362,10 @@ ForecastIO.prototype.processResponse = function(response) {
         });
         var windConverted   = self.convertSpeed(wind);
         self.devices.wind.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/wind"+icon+".png");
-        self.devices.wind.set("metrics:level", windConverted);
         self.devices.wind.set("metrics:wind", windConverted);
         self.devices.wind.set("metrics:winddregrees", parseFloat(current.windBearing));
         self.devices.wind.set("metrics:beaufort",beaufort);
-        self.averageSet(self.devices.wind,'wind',windConverted);
+        self.averageSet(self.devices.wind,windConverted);
     }
     
     // Handle barometer
@@ -390,9 +389,9 @@ ForecastIO.prototype.convertCondition = function(condition) {
 };
 
 ForecastIO.prototype.listSet = function(deviceObject,key,value,count) {
-    count = count || 3;
-    var varKey = 'metrics:'+key+'_list';
+    var varKey = 'metrics:'+key;
     var list = deviceObject.get(varKey) || [];
+    count = count || 3;
     list.unshift(value);
     while (list.length > count) {
         list.pop();
@@ -401,11 +400,13 @@ ForecastIO.prototype.listSet = function(deviceObject,key,value,count) {
     return list;
 };
 
-ForecastIO.prototype.averageSet = function(deviceObject,key,value,count) {
-    var list = this.listSet(deviceObject,key,value,count);
+ForecastIO.prototype.averageSet = function(deviceObject,value,count) {
+    var list = this.listSet(deviceObject,'list',value,count);
     var sum = _.reduce(list, function(i,j){ return i + j; }, 0);
     var avg = sum / list.length;
-    deviceObject.set('metrics:'+key+'_avg',avg);
+    deviceObject.set('metrics:level',avg);
+    deviceObject.set('metrics:current',value);
+    
     return avg;
 };
 
