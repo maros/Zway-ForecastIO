@@ -1,3 +1,10 @@
+1.07 2016 May 31, Tue
+    * Fix average calulation
+    * Improve texts
+    * Update module title
+    * Round levels
+    * Update probeType
+
 1.06 2016 Apr 20, Wed
     * Temperature falling or rising
     * Fix probeType handling
