@@ -24,13 +24,17 @@
             "label" : "__barometer_device_label__",
             "order" : 9
          },
+         "cloudcoverDevice" : {
+            "label" : "__cloudcover_device_label__",
+            "order" : 10
+         },
          "forecastHighDevice" : {
             "label" : "__forecast_high_device_label__",
-            "order" : 11
+            "order" : 12
          },
          "forecastLowDevice" : {
             "label" : "__forecast_low_device_label__",
-            "order" : 10
+            "order" : 11
          },
          "humidityDevice" : {
             "label" : "__humidity_device_label__",
@@ -83,6 +87,10 @@
          },
          "barometerDevice" : {
             "default" : true,
+            "type" : "boolean"
+         },
+         "cloudcoverDevice" : {
+            "default" : false,
             "type" : "boolean"
          },
          "forecastHighDevice" : {
