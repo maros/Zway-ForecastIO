@@ -87,6 +87,10 @@ Displays the current humidity.
 
 Displays the current air pressure.
 
+## Cloudcover
+
+Displays the current cloudcover.
+
 # Events
 
 No events are emitted
