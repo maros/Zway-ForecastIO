@@ -1,7 +1,7 @@
 /*** ForecastIO Z-Way HA module *******************************************
 
 Version: 1.01
-(c) Maroš Kollár, 2015-2017
+(c) Maroš Kollár, 2015
 -----------------------------------------------------------------------------
 Author: Maroš Kollár <maros@k-1.com>
 Description:
@@ -12,7 +12,7 @@ Description:
 function ForecastIO (id, controller) {
     // Call superconstructor first (AutomationModule)
     ForecastIO.super_.call(this, id, controller);
-
+    
     this.apiKey             = undefined;
     this.unitTemperature    = undefined;
     this.unitSystem         = undefined;
@@ -57,12 +57,12 @@ ForecastIO.prototype.init = function (config) {
     ForecastIO.super_.prototype.init.call(this, config);
 
     var self = this;
-
+    
     self.unitTemperature    = config.unitTemperature.toString();
     self.unitSystem         = config.unitSystem.toString();
     self.langFile           = self.controller.loadModuleLang("ForecastIO");
     var scaleTemperature    = self.unitTemperature === "celsius" ? '°C' : '°F';
-
+    
     this.url                = 'https://api.forecast.io/'
         + 'forecast/'
         + config.apiKey.toString()
@@ -72,7 +72,7 @@ ForecastIO.prototype.init = function (config) {
         + config.longitude.toString()
         + '?exclude=flags,alerts&lang='
         + self.controller.defaultLang;
-
+    
     self.addDevice('current',{
         probeType: 'condition',
         probeTitle: 'ForecastIOCurrent',
@@ -80,14 +80,14 @@ ForecastIO.prototype.init = function (config) {
         title: self.langFile.current,
         timestamp: 0
     });
-
+    
     self.addDevice('forecast',{
         probeType: 'forecast_range',
         probeTitle: 'ForecastIOForecast',
         scaleTitle: scaleTemperature,
         title: self.langFile.forecast
     });
-
+    
     if (self.config.humidityDevice) {
         self.addDevice('humidity',{
             probeType: 'humidity',
@@ -96,7 +96,7 @@ ForecastIO.prototype.init = function (config) {
             title: self.langFile.humidity
         });
     }
-
+    
     if (self.config.forecastLowDevice) {
         self.addDevice('forecastLow',{
             probeType: 'forecast_low',
@@ -105,7 +105,7 @@ ForecastIO.prototype.init = function (config) {
             title: self.langFile.forecastLow
         });
     }
-
+    
     if (self.config.forecastHighDevice) {
         self.addDevice('forecastHigh',{
             probeType: 'forecast_high',
@@ -114,7 +114,7 @@ ForecastIO.prototype.init = function (config) {
             title: self.langFile.forecastHigh
         });
     }
-
+    
     if (self.config.windDevice) {
         self.addDevice('wind',{
             probeType: 'wind',
@@ -132,15 +132,23 @@ ForecastIO.prototype.init = function (config) {
         });
     }
 
+    if (self.config.cloudcoverDevice) {
+        self.addDevice('cloudcover',{
+            probeType: 'cloudcover',
+            scaleTitle: '%',
+            title: self.langFile.cloudcover
+        });
+    }
+    
     var currentTime     = (new Date()).getTime();
     var currentLevel    = self.devices.current.get('metrics:level');
     var updateTime      = self.devices.current.get('metrics:timestamp');
     var intervalTime    = parseInt(self.config.interval) * 60 * 1000;
-
+    
     self.timer = setInterval(function() {
         self.fetchWeather(self);
     }, intervalTime);
-
+    
     setTimeout(function() {
         if (typeof(updateTime) === 'undefined') {
             self.fetchWeather(self);
@@ -155,41 +163,41 @@ ForecastIO.prototype.init = function (config) {
 
 ForecastIO.prototype.stop = function() {
     var self = this;
-
+    
     if (self.timer) {
         clearInterval(self.timer);
         self.timer = undefined;
     }
-
+    
     if (typeof(self.devices) !== 'undefined') {
         _.each(self.devices,function(value, key) {
             self.controller.devices.remove(value.id);
         });
         self.devices = {};
     }
-
+    
     if (typeof(self.update) !== 'undefined') {
         clearTimeout(self.update);
     }
-
+    
     ForecastIO.super_.prototype.stop.call(this);
 };
 
 ForecastIO.prototype.addDevice = function(prefix,defaults) {
     var self = this;
-
+    
     var probeTitle  = defaults.probeTitle || '';
     var scaleTitle  = defaults.scaleTitle || '';
     var probeType   = defaults.probeType || prefix;
     delete defaults.probeType;
     delete defaults.probeTitle;
     delete defaults.scaleTitle;
-
+    
     var deviceParams = {
-        overlay: {
+        overlay: { 
             deviceType: "sensorMultilevel",
             probeType: probeType,
-            metrics: {
+            metrics: { 
                 probeTitle: probeTitle,
                 scaleTitle: scaleTitle
             }
@@ -208,7 +216,7 @@ ForecastIO.prototype.addDevice = function(prefix,defaults) {
             }
         }
     };
-
+    
     self.devices[prefix] = self.controller.devices.create(deviceParams);
     return self.devices[prefix];
 };
@@ -219,11 +227,11 @@ ForecastIO.prototype.addDevice = function(prefix,defaults) {
 
 ForecastIO.prototype.fetchWeather = function () {
     var self = this;
-
+    
     if (typeof(self.update) !== 'undefined') {
         clearTimeout(self.update);
     }
-
+    
     http.request({
         url: self.url,
         async: true,
@@ -232,9 +240,9 @@ ForecastIO.prototype.fetchWeather = function () {
             console.error("[ForecastIO] Update error: "+response.statusText);
             console.logJS(response);
             self.controller.addNotification(
-                "error",
-                self.langFile.error_fetch,
-                "module",
+                "error", 
+                self.langFile.error_fetch, 
+                "module", 
                 "ForecastIO"
             );
         }
@@ -283,13 +291,13 @@ ForecastIO.prototype.convertInch = function(inch) {
 
 ForecastIO.prototype.processResponse = function(response) {
     var self        = this;
-
+    
     console.log("[ForecastIO] Update");
     var currentDate = new Date();
     var current     = response.data.currently;
     var forecast0   = response.data.daily.data[0];
     var forecast1   = response.data.daily.data[1];
-
+    
     // Handle current state
     var currentTemperature  = self.convertTemp(current.temperature);
     var temperatureList     = self.listSet(self.devices.current,"temperature_list",currentTemperature,3);
@@ -303,7 +311,7 @@ ForecastIO.prototype.processResponse = function(response) {
         }
     }
     self.devices.current.set("metrics:temperatureChange",changeTemperature);
-
+    
     self.devices.current.set("metrics:raw",current);
     self.devices.current.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+current.icon+".png");
     self.devices.current.set("metrics:level",currentTemperature);
@@ -320,11 +328,11 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.current.set("metrics:conditiongroup",self.convertCondition(current.icon));
     self.devices.current.set("metrics:low",self.convertTemp(forecast0.temperatureMin));
     self.devices.current.set("metrics:high",self.convertTemp(forecast0.temperatureMax));
-
+    
     // Handle forecast
     var forecastLow = Math.round(self.convertTemp(forecast1.temperatureMin));
     var forecastHigh = Math.round(self.convertTemp(forecast1.temperatureMax));
-
+    
     self.devices.forecast.set("metrics:conditiongroup",self.convertCondition(forecast1.icon));
     self.devices.forecast.set("metrics:condition",forecast1.icon);
     self.devices.forecast.set("metrics:level", forecastLow + ' - ' + forecastHigh);
@@ -334,10 +342,10 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.forecast.set("metrics:weather",forecast1.summary);
     self.devices.forecast.set("metrics:high",forecastHigh);
     self.devices.forecast.set("metrics:low",forecastLow);
-
+    
     self.devices.forecast.set("metrics:raw_daily",response.data.daily);
     self.devices.forecast.set("metrics:raw_hourly",response.data.hourly);
-
+    
     // Forecast low/high humidity
     if (self.config.forecastLowDevice) {
         self.devices.forecastLow.set("metrics:level", forecastLow);
@@ -345,12 +353,12 @@ ForecastIO.prototype.processResponse = function(response) {
     if (self.config.forecastHighDevice) {
         self.devices.forecastHigh.set("metrics:level", forecastHigh);
     }
-
+    
     // Handle humidity
     if (self.config.humidityDevice) {
         self.devices.humidity.set("metrics:level", Math.round(parseFloat(current.humidity) * 100));
     }
-
+    
     // Handle wind
     if (self.config.windDevice) {
         var wind            = parseInt(current.windSpeed);
@@ -367,10 +375,18 @@ ForecastIO.prototype.processResponse = function(response) {
         self.devices.wind.set("metrics:beaufort",beaufort);
         self.averageSet(self.devices.wind,windConverted);
     }
-
+    
     // Handle barometer
     if (self.config.barometerDevice) {
         self.devices.barometer.set('metrics:level',self.convertPressure(current.pressure));
+    }
+
+    // Handle cloudcover
+    if (self.config.cloudcoverDevice) {
+        self.devices.cloudcover.set("metrics:level", Math.round(current.cloudCover * 100));
+        
+        var icon = current.cloudCover < 0.5 ? "clear-day" : "partly-cloudy-day";
+        self.devices.cloudcover.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_" + icon + ".png");
     }
 };
 
@@ -406,9 +422,6 @@ ForecastIO.prototype.averageSet = function(deviceObject,value,count) {
     var avg = sum / list.length;
     deviceObject.set('metrics:level',avg);
     deviceObject.set('metrics:current',value);
-
+    
     return avg;
 };
-
-
-
