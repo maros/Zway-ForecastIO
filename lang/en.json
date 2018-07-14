@@ -3,6 +3,8 @@
    "barometer" : "Barometer",
    "barometer_device_label" : "Barometer device",
    "current" : "Current Condition",
+   "cloudcover" : "Cloudcover",
+   "cloudcover_device_label" : "Cloudcover device",
    "forecast" : "Forecast",
    "forecastHigh" : "High Forecast",
    "forecastLow" : "Low Forecast",
