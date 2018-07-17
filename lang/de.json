@@ -3,6 +3,8 @@
    "barometer" : "Barometer",
    "barometer_device_label" : "Barometer Modul",
    "current" : "Wetter",
+   "cloudcover" : "Bewölkung",
+   "cloudcover_device_label" : "Bewölkung Modul",
    "forecast" : "Vorhersage",
    "forecastHigh" : "Vorhersage Höchstwert",
    "forecastLow" : "Vorhersage Tiefstwert",
