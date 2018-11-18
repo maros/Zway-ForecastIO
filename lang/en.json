@@ -5,6 +5,7 @@
    "current" : "Current Condition",
    "cloudcover" : "Cloudcover",
    "cloudcover_device_label" : "Cloudcover device",
+   "error_fetch" : "Could not load weather data from forecast.io.",
    "forecast" : "Forecast",
    "forecastHigh" : "High Forecast",
    "forecastLow" : "Low Forecast",
@@ -23,6 +24,5 @@
    "unit_system_metric" : "Metric",
    "unit_temperature" : "Temperature unit",
    "wind" : "Wind",
-   "wind_device_label" : "Wind device",
-   "error_fetch": "Could not load weather data from forecast.io."
+   "wind_device_label" : "Wind device"
 }

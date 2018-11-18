@@ -5,6 +5,7 @@
    "current" : "Wetter",
    "cloudcover" : "Bewölkung",
    "cloudcover_device_label" : "Bewölkung Modul",
+   "error_fetch" : "Konnte Wetterdaten nicht von forecast.io laden.",
    "forecast" : "Vorhersage",
    "forecastHigh" : "Vorhersage Höchstwert",
    "forecastLow" : "Vorhersage Tiefstwert",
@@ -23,6 +24,5 @@
    "unit_system_metric" : "Metrisch",
    "unit_temperature" : "Temperatureinheit",
    "wind" : "Wind",
-   "wind_device_label" : "Wind Modul",
-   "error_fetch": "Konnte Wetterdaten nicht von forecast.io laden."
+   "wind_device_label" : "Wind Modul"
 }
