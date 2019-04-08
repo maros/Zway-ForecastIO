@@ -1,8 +1,11 @@
 {
    "api_key" : "API Schlüssel",
    "barometer" : "Barometer",
+   "uv" : "UV-Index",
    "barometer_device_label" : "Barometer Modul",
+   "uv_device_label" : "UV-Index Modul",
    "current" : "Wetter",
+   "error_fetch" : "Konnte Wetterdaten nicht von forecast.io laden.",
    "forecast" : "Vorhersage",
    "forecastHigh" : "Vorhersage Höchstwert",
    "forecastLow" : "Vorhersage Tiefstwert",
@@ -14,13 +17,12 @@
    "interval_label" : "Aktualisierungsintervall",
    "latitude" : "Breite",
    "longitude" : "Länge",
-   "m_descr" : "Dieses Modul holt aktuelle Wetterdaten und Vorhersagen von forecast.io. Es wird je ein Modul für die aktuellen Wetterbedingungen, die Vorhersage, Windbedingungen und den Luftdruck angelegt.<br>Siehe <a href=https://github.com/maros/Zway-ForecastIO/blob/master/README.md>github.com/maros/Zway-ForecastIO</a> für detailliertere Dokumentation.",
+   "m_descr" : "Dieses Modul holt aktuelle Wetterdaten und Vorhersagen von darksky.net (vormals forecast.io). Es wird je ein Modul für die aktuellen Wetterbedingungen, die Vorhersage, Windbedingungen und den Luftdruck angelegt.<br>Siehe <a href=https://github.com/maros/Zway-ForecastIO/blob/master/README.md>github.com/maros/Zway-ForecastIO</a> für detailliertere Dokumentation.",
    "m_title" : "Forecast.io Wetter",
    "unit_system" : "Maßeinheiten",
    "unit_system_imperial" : "Angloamerikanisch",
    "unit_system_metric" : "Metrisch",
    "unit_temperature" : "Temperatureinheit",
    "wind" : "Wind",
-   "wind_device_label" : "Wind Modul",
-   "error_fetch": "Konnte Wetterdaten nicht von forecast.io laden."
+   "wind_device_label" : "Wind Modul"
 }

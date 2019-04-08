@@ -63,7 +63,7 @@ ForecastIO.prototype.init = function (config) {
     self.langFile           = self.controller.loadModuleLang("ForecastIO");
     var scaleTemperature    = self.unitTemperature === "celsius" ? '°C' : '°F';
 
-    this.url                = 'https://api.forecast.io/'
+    this.url                = 'https://api.darksky.net/'
         + 'forecast/'
         + config.apiKey.toString()
         + '/'
@@ -94,6 +94,14 @@ ForecastIO.prototype.init = function (config) {
             icon: '/ZAutomation/api/v1/load/modulemedia/ForecastIO/humidity.png',
             scaleTitle: '%',
             title: self.langFile.humidity
+        });
+    }
+
+    if (self.config.uvDevice === true) {
+        self.addDevice('uv',{
+            probeType: 'ultraviolet',
+            icon: 'ultraviolet',
+            title: self.langFile.uv
         });
     }
 
@@ -371,6 +379,11 @@ ForecastIO.prototype.processResponse = function(response) {
     // Handle barometer
     if (self.config.barometerDevice) {
         self.devices.barometer.set('metrics:level',self.convertPressure(current.pressure));
+    }
+
+    // Handle uv-index
+    if (self.config.uvDevice) {
+        self.devices.uv.set('metrics:level',self.convertPressure(current.uvIndex));
     }
 };
 
