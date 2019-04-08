@@ -5,6 +5,8 @@
    "uv" : "UV-Index",
    "uv_device_label" : "UV-index device",
    "current" : "Current Condition",
+   "cloudcover" : "Cloudcover",
+   "cloudcover_device_label" : "Cloudcover device",
    "error_fetch" : "Could not load weather data from forecast.io.",
    "forecast" : "Forecast",
    "forecastHigh" : "High Forecast",

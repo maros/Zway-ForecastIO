@@ -5,6 +5,8 @@
    "barometer_device_label" : "Barometer Modul",
    "uv_device_label" : "UV-Index Modul",
    "current" : "Wetter",
+   "cloudcover" : "Bewölkung",
+   "cloudcover_device_label" : "Bewölkungs Modul",
    "error_fetch" : "Konnte Wetterdaten nicht von forecast.io laden.",
    "forecast" : "Vorhersage",
    "forecastHigh" : "Vorhersage Höchstwert",

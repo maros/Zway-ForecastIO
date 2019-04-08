@@ -139,6 +139,14 @@ ForecastIO.prototype.init = function (config) {
             title: self.langFile.barometer
         });
     }
+    
+    if (self.config.cloudcoverDevice) {
+        self.addDevice('cloudcover',{
+            probeType: 'cloudcover',
+            scaleTitle: '%',
+            title: self.langFile.cloudcover
+        });
+    }
 
     var currentTime     = (new Date()).getTime();
     var currentLevel    = self.devices.current.get('metrics:level');
@@ -385,6 +393,13 @@ ForecastIO.prototype.processResponse = function(response) {
     if (self.config.uvDevice) {
         self.devices.uv.set('metrics:level',self.convertPressure(current.uvIndex));
     }
+
+    // Handle cloudcover
+    if (self.config.cloudcoverDevice) {
+        self.devices.cloudcover.set("metrics:level", Math.round(current.cloudCover * 100));
+        var icon = current.cloudCover < 0.5 ? "clear-day" : "partly-cloudy-day";
+        self.devices.cloudcover.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_" + icon + ".png");
+    }
 };
 
 ForecastIO.prototype.convertCondition = function(condition) {
@@ -422,6 +437,5 @@ ForecastIO.prototype.averageSet = function(deviceObject,value,count) {
 
     return avg;
 };
-
 
 

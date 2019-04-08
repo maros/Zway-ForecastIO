@@ -24,6 +24,10 @@
             "label" : "__barometer_device_label__",
             "order" : 10
          },
+         "cloudcoverDevice" : {
+            "label" : "__cloudcover_device_label__",
+            "order" : 10
+         },
          "forecastHighDevice" : {
             "label" : "__forecast_high_device_label__",
             "order" : 12
@@ -91,6 +95,10 @@
          },
          "uvDevice" : {
             "default" : true,
+            "type" : "boolean"
+         },
+         "cloudcoverDevice" : {
+            "default" : false,
             "type" : "boolean"
          },
          "forecastHighDevice" : {
