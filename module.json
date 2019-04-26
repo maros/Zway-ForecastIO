@@ -40,10 +40,6 @@
             "label" : "__humidity_device_label__",
             "order" : 7
          },
-         "uvDevice" : {
-            "label" : "__uv_device_label__",
-            "order" : 8
-         },
          "interval" : {
             "helper" : "__interval_helper__",
             "label" : "__interval_label__",
@@ -73,6 +69,10 @@
             ],
             "order" : 5
          },
+         "uvDevice" : {
+            "label" : "__uv_device_label__",
+            "order" : 8
+         },
          "windDevice" : {
             "label" : "__wind_device_label__",
             "order" : 9
@@ -90,10 +90,6 @@
             "type" : "string"
          },
          "barometerDevice" : {
-            "default" : true,
-            "type" : "boolean"
-         },
-         "uvDevice" : {
             "default" : true,
             "type" : "boolean"
          },
@@ -139,6 +135,10 @@
             ],
             "required" : true
          },
+         "uvDevice" : {
+            "default" : true,
+            "type" : "boolean"
+         },
          "windDevice" : {
             "default" : true,
             "type" : "boolean"
@@ -148,5 +148,5 @@
       "type" : "object"
    },
    "singleton" : true,
-   "version" : "1.07"
+   "version" : "1.08"
 }
