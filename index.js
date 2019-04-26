@@ -70,7 +70,7 @@ ForecastIO.prototype.init = function (config) {
         + config.latitude.toString()
         + ','
         + config.longitude.toString()
-        + '?exclude=flags,alerts&lang='
+        + '?exclude=flags,alerts&units=si&lang='
         + self.controller.defaultLang;
 
     self.addDevice('current',{
@@ -139,7 +139,7 @@ ForecastIO.prototype.init = function (config) {
             title: self.langFile.barometer
         });
     }
-    
+
     if (self.config.cloudcoverDevice) {
         self.addDevice('cloudcover',{
             probeType: 'cloudcover',
@@ -263,37 +263,37 @@ ForecastIO.prototype.convertPressure = function(pressureHpa) {
     if (self.config.unitSystem === "metric") {
         return pressureHpa;
     } else {
-        return  Math.round(pressureHpa / 33.8638866667);
+        return Math.round(pressureHpa / 33.8638866667);
     }
 };
 
-ForecastIO.prototype.convertTemp = function(tempF) {
+ForecastIO.prototype.convertTemp = function(tempC) {
     var self = this;
-    tempF = parseFloat(tempF);
+    tempC = parseFloat(tempC);
     if (self.config.unitTemperature === "celsius") {
-        return Math.round((tempF -32) * 5 / 9 * 10) / 10;
+        return tempC;
     } else {
-        return tempF;
+        return Math.round((tempC * 1.8)) + 32;
     }
 };
 
-ForecastIO.prototype.convertSpeed = function(speedMs) {
+ForecastIO.prototype.convertSpeed = function(ms) {
     var self = this;
-    speedMs = parseFloat(speedMs);
+    ms = parseFloat(ms);
     if (self.config.unitSystem === "metric") {
-        return Math.round(speedMs * 60 * 60 / 1000);
+        return Math.round(ms * 60 * 60 / 1000);
     } else {
-        return Math.round(speedMs * 60 * 60 / 1609.34);
+        return Math.round(ms * 60 * 60 / 1609.34);
     }
 };
 
-ForecastIO.prototype.convertInch = function(inch) {
+ForecastIO.prototype.convertLength = function(mm) {
     var self = this;
-    inch = parseFloat(inch);
+    mm = parseFloat(mm);
     if (self.config.unitSystem === "metric") {
-        return inch * 2.54 * 10;
+        return mm;
     } else {
-        return inch;
+        return mm * 0.039370;
     }
 };
 
@@ -330,7 +330,7 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.current.set("metrics:feelslike", self.convertTemp(current.apparentTemperature));
     self.devices.current.set("metrics:ozone",current.ozone);
     self.devices.current.set("metrics:dewpoint",current.dewPoint);
-    self.devices.current.set("metrics:percipintensity",self.convertInch(current.precipIntensity));
+    self.devices.current.set("metrics:percipintensity",self.convertLength(current.precipIntensity));
     self.devices.current.set("metrics:cloudcover",Math.round(current.cloudCover * 100));
     self.devices.current.set("metrics:condition",current.icon);
     self.devices.current.set("metrics:conditiongroup",self.convertCondition(current.icon));
@@ -346,7 +346,7 @@ ForecastIO.prototype.processResponse = function(response) {
     self.devices.forecast.set("metrics:level", forecastLow + ' - ' + forecastHigh);
     self.devices.forecast.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_"+forecast1.icon+".png");
     self.devices.forecast.set("metrics:pop",Math.round(forecast1.precipProbability  * 100));
-    self.devices.forecast.set("metrics:percipintensity",self.convertInch(forecast1.precipIntensity));
+    self.devices.forecast.set("metrics:percipintensity",self.convertLength(forecast1.precipIntensity));
     self.devices.forecast.set("metrics:weather",forecast1.summary);
     self.devices.forecast.set("metrics:high",forecastHigh);
     self.devices.forecast.set("metrics:low",forecastLow);
