@@ -403,7 +403,7 @@ ForecastIO.prototype.processResponse = function(response) {
 };
 
 ForecastIO.prototype.convertCondition = function(condition) {
-    condition = condition.replace('-night','');
+    condition = condition.replace('-(night|day)$','');
     if (_.contains(["snow","sleet"], condition)) {
         return 'snow';
     } else if (_.contains(["rain",""], condition)) {
