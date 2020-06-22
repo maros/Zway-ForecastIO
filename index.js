@@ -48,8 +48,8 @@ ForecastIO.prototype.windBeaufort = [
 ];
 ForecastIO.prototype.windIcons = [
     1,
-    3,
-    6,
+    4,
+    7,
     Number.POSITIVE_INFINITY
 ];
 
@@ -369,15 +369,15 @@ ForecastIO.prototype.processResponse = function(response) {
 
     // Handle wind
     if (self.config.windDevice) {
-        var wind            = parseInt(current.windSpeed);
+        var wind            = (parseFloat(current.windSpeed,10) + parseFloat(current.windGust,10)) / 2;
         var beaufort = _.findIndex(self.windBeaufort,function(check) {
             return wind < check;
         });
-        var icon = _.findIndex(self.windIcons,function(check) {
+        var icon_wind = _.findIndex(self.windIcons,function(check) {
             return beaufort < check;
         });
         var windConverted   = self.convertSpeed(wind);
-        self.devices.wind.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/wind"+icon+".png");
+        self.devices.wind.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/wind"+icon_wind+".png");
         self.devices.wind.set("metrics:wind", windConverted);
         self.devices.wind.set("metrics:winddregrees", parseFloat(current.windBearing));
         self.devices.wind.set("metrics:beaufort",beaufort);
