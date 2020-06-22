@@ -397,8 +397,8 @@ ForecastIO.prototype.processResponse = function(response) {
     // Handle cloudcover
     if (self.config.cloudcoverDevice) {
         self.devices.cloudcover.set("metrics:level", Math.round(current.cloudCover * 100));
-        var icon = current.cloudCover < 0.5 ? "clear-day" : "partly-cloudy-day";
-        self.devices.cloudcover.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_" + icon + ".png");
+        var icon_cloud = current.cloudCover < 0.5 ? "clear-day" : "partly-cloudy-day";
+        self.devices.cloudcover.set("metrics:icon", "/ZAutomation/api/v1/load/modulemedia/ForecastIO/condition_" + icon_cloud + ".png");
     }
 };
 
